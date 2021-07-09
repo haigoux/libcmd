@@ -1,4 +1,4 @@
-# self_messages
+# libcmd
 
 libcmd is a Python library for creating and executing commands over a network socket connection.
 
