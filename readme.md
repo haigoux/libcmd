@@ -16,7 +16,7 @@ pip install libcmd
 ```python
 
 # CLIENT
-from libcmd import libcmd
+from libcmd import cmds
 c = cmds()
 
 output = c.send_socket(ip="localhost", port=8080, command="command", packet_size=1024, custom_arg="Bat")
@@ -28,7 +28,7 @@ __________________
 ```python
 
 # SERVER
-from libcmd import libcmd
+from libcmd import cmds
 c = cmds()
 
 def command(custom_arg: str):
