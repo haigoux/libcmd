@@ -32,7 +32,7 @@ from libcmd import cmds
 c = cmds()
 
 def command(custom_arg: str):
-    print(f"The command is {custom_arg}")
+    print(fcustom argument: {custom_arg}")
     return True
 
 c.add("command", command)
