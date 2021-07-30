@@ -38,7 +38,7 @@ class cmds:
                 data = s.recv(packet_size)
                 return pickle.loads(data)
         except Exception as e:
-            None
+            print(f"[ERR] Data not sent due to an execption\n\n{e}")
 
     
     def start_socket(self, ip: str="localhost", port: int=80, packet_size: int=1024):
@@ -47,19 +47,27 @@ class cmds:
         """
         Create a socket to receive commands over the network.
         """
-        while True:
-            try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.bind((ip, port))
-                    s.listen()
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind((ip, port))
+            while True:
+                s.listen()
+                try:
                     conn, addr = s.accept()
-                    print(f"[{datetime.now()}] Connection from {addr[0]}:{addr[1]}")
-                    with conn:
-                        while True:
+                except:
+                    print(f"[ERR - {datetime.now()}] Initial connection failed at conn, addr = s.accept()")
+                    continue
+                print(f"[{datetime.now()}] Connection from {addr[0]}:{addr[1]}")
+                with conn:
+                    while True:
+                        try:
                             data = conn.recv(packet_size)
                             if not data:
-                                None
+                                break
                             dat = pickle.loads(data)
+                        except:
+                            print(f"[ERR - {datetime.now()}] Malformed data was sent")
+                            continue
+                        try:
                             if type(dat) == dict:
                                 args_list = dat['content']['args']
                                 if self.is_valid_function(dat['content']['function']):
@@ -99,9 +107,11 @@ class cmds:
                                 conn.sendall(pickle.dumps(response))
                                 print(f"[{datetime.now()}] RESPONDED WITH: {response}")
                             break
+                        except:
+                            print(f"[ERR - {datetime.now()}] Data couldnt be sent back to client")
+                            continue
 
-            except Exception as e:
-                print("Recieve socket error: " +str(e))
+
 
     def is_valid_function(self, fname: str):
         for item in self.pairs:
