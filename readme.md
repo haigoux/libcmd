@@ -41,8 +41,3 @@ c.start_socket()
 ```
 
 
-## Contributing
-Suck my cock and balls
-
-## License
-[MIT](https://www.pornhub.com/)
